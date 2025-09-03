@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
@@ -12,3 +12,12 @@ migrate = Migrate(app, db)
 ma = Marshmallow(app)
 api = Api(app)
 CORS(app)
+
+@app.before_request
+def create_table():
+    if request.endpoint == 'index':
+        db.create_all()
+
+
+from .models import agendamento_model, login_model, profissional_model, servicos_model, usuario_model
+# TODO: importar as views para a API encontrar as rotas
